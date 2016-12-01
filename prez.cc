@@ -4,10 +4,24 @@
 #include <string>
 #include <algorithm>
 
+// String trimming
+#include <functional>
+#include <cctype>
+#include <locale>
+
+
 using namespace std;
 
 ifstream prez;
 ofstream output;
+
+
+// trim from end (in place)
+static inline void rtrim(std::string &s) {
+    s.erase(std::find_if(s.rbegin(), s.rend(),
+            std::not1(std::ptr_fun<int, int>(std::isspace))).base(), s.end());
+}
+
 
 
 int main()
@@ -29,6 +43,12 @@ int main()
 		}*/
 		plist[linecount].chronum = linecount;
 		prez.getline(plist[linecount].pname, 25, '\n');
+
+		// Strip all trailing whitespace characters from the name
+		//plist[linecount].pname = rtrim(plist[linecount].pname);
+		string str_pname(plist[linecount].pname);
+		rtrim(str_pname);
+		strcpy(plist[linecount].pname, str_pname.c_str());
 	/*	cout << "chronum is " << plist[linecount].chronum << endl;
 		cout << "getline is " << plist[linecount].pname << endl;
 		cout << "linecount is " << linecount << endl << endl; */
